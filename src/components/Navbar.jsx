@@ -39,7 +39,7 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className=" mx-auto px-12 py-10">
+      <div className=" mx-auto px-12 py-5">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <motion.div

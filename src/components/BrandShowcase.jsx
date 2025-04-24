@@ -153,7 +153,7 @@ const BrandShowcase = () => {
           viewport={{ once: true }}
           className="flex flex-col items-center mb-12"
         >
-          <div className="relative w-12 h-22 mb-4">
+          <div className="relative w-12 h-12">
             {/* Mouse SVG */}
             <svg viewBox="0 0 50 80" className="w-full h-full text-gray-700">
               <path

@@ -168,9 +168,11 @@ const HeroSection = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-center justify-center h-full py-10 lg:py-0">
-        {/* Text Content - Left Side */}
-        <div className="w-full lg:w-1/2 h-auto lg:h-full flex items-center justify-center lg:justify-start pr-0 lg:pr-16 order-2 lg:order-1 mt-8 lg:mt-0">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 h-full py-10 lg:py-0">
+        
+        <div className="pt-10 pb-30 px-20 flex flex-col lg:flex-row items-center justify-center">
+          {/* Text Content - Left Side */}
+        <div className="w-full p-10 lg:w-1/2 h-auto lg:h-full flex items-center justify-center lg:justify-start pr-0 lg:pr-16 order-2 lg:order-1 mt-8 lg:mt-0">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -386,6 +388,8 @@ const HeroSection = () => {
             </motion.div>
           </div>
         </motion.div>
+        </div>
+        
       </div>
 
       {/* Scrolling Indicator - Centered */}
