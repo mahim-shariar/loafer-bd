@@ -193,6 +193,30 @@ const NextGenProductGrid = () => {
         { type: "image", src: "/shoes.png" },
       ],
     },
+    {
+      id: 6,
+      name: "Quantum X-9000",
+      price: 199,
+      category: "Atheltic",
+      description: "Zero-gravity cushioning with adaptive rebound",
+      media: [
+        
+        { type: "image", src: "/shoes.png" },
+        { type: "image", src: "/shoes.png" },
+      ],
+    },
+    {
+      id: 7,
+      name: "Quantum X-9000",
+      price: 199,
+      category: "Running",
+      description: "Zero-gravity cushioning with adaptive rebound",
+      media: [
+        
+        { type: "image", src: "/shoes.png" },
+        { type: "image", src: "/shoes.png" },
+      ],
+    },
     // Add more products with mixed media (3D models + images)
   ];
 
