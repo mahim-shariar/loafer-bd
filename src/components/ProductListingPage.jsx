@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { FiSearch, FiFilter, FiX, FiChevronDown, FiStar } from "react-icons/fi";
+import { useNotification } from "./NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 // Sample products data
 const products = [
@@ -21,8 +23,8 @@ const products = [
     media: [
       { type: "3d", src: "/shoe-draco-show.glb" },
       { type: "image", src: "/shoes.png" },
-      { type: "image", src: "/shoes-side.png" }
-    ]
+      { type: "image", src: "/shoes-side.png" },
+    ],
   },
   {
     id: 2,
@@ -37,8 +39,8 @@ const products = [
     description: "Premium leather with timeless design",
     media: [
       { type: "image", src: "/oxford-brown.png" },
-      { type: "image", src: "/oxford-side.png" }
-    ]
+      { type: "image", src: "/oxford-side.png" },
+    ],
   },
   {
     id: 3,
@@ -54,8 +56,8 @@ const products = [
     description: "Lightweight mesh with responsive sole",
     media: [
       { type: "3d", src: "/shoe-draco-show.glb" },
-      { type: "image", src: "/airflex-blue.png" }
-    ]
+      { type: "image", src: "/airflex-blue.png" },
+    ],
   },
   {
     id: 4,
@@ -70,8 +72,8 @@ const products = [
     description: "Carbon fiber reinforced performance shoe",
     media: [
       { type: "image", src: "/carbon-black.png" },
-      { type: "image", src: "/carbon-detail.png" }
-    ]
+      { type: "image", src: "/carbon-detail.png" },
+    ],
   },
   {
     id: 5,
@@ -86,8 +88,8 @@ const products = [
     description: "All-terrain grip with waterproof membrane",
     media: [
       { type: "image", src: "/trailblazer-green.png" },
-      { type: "image", src: "/trailblazer-tread.png" }
-    ]
+      { type: "image", src: "/trailblazer-tread.png" },
+    ],
   },
   {
     id: 6,
@@ -102,8 +104,8 @@ const products = [
     description: "Speed-focused design with breathable upper",
     media: [
       { type: "3d", src: "/shoe-draco-show.glb" },
-      { type: "image", src: "/velocity-red.png" }
-    ]
+      { type: "image", src: "/velocity-red.png" },
+    ],
   },
   {
     id: 7,
@@ -119,9 +121,9 @@ const products = [
     description: "Ultra-soft cushioning for all-day comfort",
     media: [
       { type: "image", src: "/cloudstride-white.png" },
-      { type: "image", src: "/cloudstride-sole.png" }
-    ]
-  }
+      { type: "image", src: "/cloudstride-sole.png" },
+    ],
+  },
 ];
 
 // 3D Model Component
@@ -142,6 +144,13 @@ const ProductModel = ({ modelPath, autoRotate }) => {
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const { addNotification } = useNotification();
+
+  const handleAddToCart = () => {
+    addNotification("Product added to cart", product.name);
+  };
+
+  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -154,11 +163,11 @@ const ProductCard = ({ product }) => {
       onHoverEnd={() => setIsHovered(false)}
       className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
     >
-      <div 
+      <div
         className="relative h-64 w-full bg-gray-100 cursor-pointer"
-        onClick={() => setCurrentMediaIndex(
-          (prev) => (prev + 1) % product.media.length
-        )}
+        onClick={() =>
+          setCurrentMediaIndex((prev) => (prev + 1) % product.media.length)
+        }
       >
         <AnimatePresence mode="wait">
           {product.media[currentMediaIndex].type === "3d" ? (
@@ -176,9 +185,9 @@ const ProductCard = ({ product }) => {
               >
                 <ambientLight intensity={0.5} />
                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                <ProductModel 
-                  modelPath={product.media[currentMediaIndex].src} 
-                  autoRotate={isHovered} 
+                <ProductModel
+                  modelPath={product.media[currentMediaIndex].src}
+                  autoRotate={isHovered}
                 />
                 <OrbitControls
                   enableZoom={false}
@@ -201,7 +210,7 @@ const ProductCard = ({ product }) => {
             />
           )}
         </AnimatePresence>
-        
+
         {product.isNew && (
           <motion.div
             initial={{ scale: 0 }}
@@ -211,7 +220,7 @@ const ProductCard = ({ product }) => {
             NEW
           </motion.div>
         )}
-        
+
         <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
           {product.media.map((_, index) => (
             <button
@@ -229,7 +238,7 @@ const ProductCard = ({ product }) => {
           ))}
         </div>
       </div>
-      
+
       <div className="p-4">
         <div className="flex justify-between items-start">
           <div>
@@ -238,17 +247,19 @@ const ProductCard = ({ product }) => {
               {product.color} • {product.category}
             </p>
           </div>
-          <span className="text-lg font-bold text-gray-900">${product.price}</span>
+          <span className="text-lg font-bold text-gray-900">
+            ${product.price}
+          </span>
         </div>
-        
+
         <div className="flex items-center mt-2 mb-3">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <FiStar
                 key={i}
                 className={`h-4 w-4 ${
-                  i < Math.floor(product.rating) 
-                    ? "text-yellow-400 fill-yellow-400" 
+                  i < Math.floor(product.rating)
+                    ? "text-yellow-400 fill-yellow-400"
                     : "text-gray-300"
                 }`}
               />
@@ -258,23 +269,25 @@ const ProductCard = ({ product }) => {
             ({product.reviewCount})
           </span>
         </div>
-        
+
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">
           {product.description}
         </p>
-        
+
         <div className="flex justify-between">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="text-sm font-medium text-gray-900 hover:text-cyan-600 transition-colors"
+            className="text-sm font-medium text-white transition-colors  py-2 px-4 rounded-full bg-black"
+            onClick={() => navigate("/product")}
           >
             View Details
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-medium"
+            className=" text-black px-4 py-2 rounded-full text-sm font-medium bg-white border-2 border-black hover:bg-gray-100 transition-colors "
+            onClick={handleAddToCart}
           >
             Add to Cart
           </motion.button>
@@ -331,77 +344,99 @@ const ProductListingPage = () => {
   });
 
   // Get all unique filter options from products
-  const allCategories = [...new Set(products.map(p => p.category))];
-  const allColors = [...new Set(products.map(p => p.color))];
-  const allSizes = [...new Set(products.flatMap(p => p.size))];
-  const allGenders = [...new Set(products.map(p => p.gender))];
-  
+  const allCategories = [...new Set(products.map((p) => p.category))];
+  const allColors = [...new Set(products.map((p) => p.color))];
+  const allSizes = [...new Set(products.flatMap((p) => p.size))];
+  const allGenders = [...new Set(products.map((p) => p.gender))];
+
   const priceRanges = [
     { label: "Under $100", value: "0-100", test: (p) => p.price < 100 },
-    { label: "$100 - $200", value: "100-200", test: (p) => p.price >= 100 && p.price < 200 },
-    { label: "$200 - $300", value: "200-300", test: (p) => p.price >= 200 && p.price < 300 },
-    { label: "Over $300", value: "300-1000", test: (p) => p.price >= 300 }
+    {
+      label: "$100 - $200",
+      value: "100-200",
+      test: (p) => p.price >= 100 && p.price < 200,
+    },
+    {
+      label: "$200 - $300",
+      value: "200-300",
+      test: (p) => p.price >= 200 && p.price < 300,
+    },
+    { label: "Over $300", value: "300-1000", test: (p) => p.price >= 300 },
   ];
 
   const ratingOptions = [
     { label: "5 Stars", value: "5", test: (p) => p.rating >= 5 },
     { label: "4 Stars & Up", value: "4", test: (p) => p.rating >= 4 },
-    { label: "3 Stars & Up", value: "3", test: (p) => p.rating >= 3 }
+    { label: "3 Stars & Up", value: "3", test: (p) => p.rating >= 3 },
   ];
 
   // Filter products based on active filters and search query
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = products.filter((product) => {
     // Search filter
-    const matchesSearch = searchQuery === "" ||
+    const matchesSearch =
+      searchQuery === "" ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     // Category filter
-    const matchesCategory = activeFilters.category.length === 0 || 
+    const matchesCategory =
+      activeFilters.category.length === 0 ||
       activeFilters.category.includes(product.category);
-    
+
     // Price filter
-    const matchesPrice = activeFilters.price.length === 0 ||
-      activeFilters.price.some(range => {
+    const matchesPrice =
+      activeFilters.price.length === 0 ||
+      activeFilters.price.some((range) => {
         const [min, max] = range.split("-").map(Number);
         return product.price >= min && product.price <= max;
       });
-    
+
     // Color filter
-    const matchesColor = activeFilters.color.length === 0 ||
+    const matchesColor =
+      activeFilters.color.length === 0 ||
       activeFilters.color.includes(product.color);
-    
+
     // Size filter
-    const matchesSize = activeFilters.size.length === 0 ||
-      activeFilters.size.some(size => product.size.includes(size));
-    
+    const matchesSize =
+      activeFilters.size.length === 0 ||
+      activeFilters.size.some((size) => product.size.includes(size));
+
     // Gender filter
-    const matchesGender = activeFilters.gender.length === 0 ||
+    const matchesGender =
+      activeFilters.gender.length === 0 ||
       activeFilters.gender.includes(product.gender);
-    
+
     // Rating filter
-    const matchesRating = activeFilters.rating.length === 0 ||
-      activeFilters.rating.some(rating => {
+    const matchesRating =
+      activeFilters.rating.length === 0 ||
+      activeFilters.rating.some((rating) => {
         const minRating = Number(rating);
         return product.rating >= minRating;
       });
-    
-    return matchesSearch && matchesCategory && matchesPrice && 
-           matchesColor && matchesSize && matchesGender && matchesRating;
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesPrice &&
+      matchesColor &&
+      matchesSize &&
+      matchesGender &&
+      matchesRating
+    );
   });
 
   // Toggle filter
   const toggleFilter = (filterType, value) => {
-    setActiveFilters(prev => {
+    setActiveFilters((prev) => {
       const currentFilters = [...prev[filterType]];
       const index = currentFilters.indexOf(value);
-      
+
       if (index === -1) {
         currentFilters.push(value);
       } else {
         currentFilters.splice(index, 1);
       }
-      
+
       return { ...prev, [filterType]: currentFilters };
     });
   };
@@ -424,11 +459,7 @@ const ProductListingPage = () => {
       {/* Sticky Search Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 hidden md:block">
-              Premium Footwear
-            </h1>
-            
+          <div className="flex items-center justify-center">
             {/* Search Bar */}
             <div className="relative flex-1 max-w-2xl mx-4">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -442,7 +473,7 @@ const ProductListingPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            
+
             {/* Mobile Filter Button */}
             <button
               type="button"
@@ -463,7 +494,8 @@ const ProductListingPage = () => {
             <div className="bg-white p-6 rounded-xl shadow-sm sticky top-24">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-lg font-bold text-gray-900">Filters</h2>
-                {(Object.values(activeFilters).flat().length > 0 || searchQuery) && (
+                {(Object.values(activeFilters).flat().length > 0 ||
+                  searchQuery) && (
                   <button
                     onClick={clearAllFilters}
                     className="text-sm text-cyan-600 hover:text-cyan-800"
@@ -472,11 +504,11 @@ const ProductListingPage = () => {
                   </button>
                 )}
               </div>
-              
+
               {/* Category Filter */}
               <FilterAccordion title="Category" isOpen={true} toggle={() => {}}>
                 <div className="space-y-2">
-                  {allCategories.map(category => (
+                  {allCategories.map((category) => (
                     <div key={category} className="flex items-center">
                       <input
                         id={`category-${category}`}
@@ -495,11 +527,11 @@ const ProductListingPage = () => {
                   ))}
                 </div>
               </FilterAccordion>
-              
+
               {/* Price Filter */}
               <FilterAccordion title="Price" isOpen={true} toggle={() => {}}>
                 <div className="space-y-2">
-                  {priceRanges.map(range => (
+                  {priceRanges.map((range) => (
                     <div key={range.value} className="flex items-center">
                       <input
                         id={`price-${range.value}`}
@@ -518,11 +550,11 @@ const ProductListingPage = () => {
                   ))}
                 </div>
               </FilterAccordion>
-              
+
               {/* Color Filter */}
               <FilterAccordion title="Color" isOpen={true} toggle={() => {}}>
                 <div className="space-y-2">
-                  {allColors.map(color => (
+                  {allColors.map((color) => (
                     <div key={color} className="flex items-center">
                       <input
                         id={`color-${color}`}
@@ -541,11 +573,11 @@ const ProductListingPage = () => {
                   ))}
                 </div>
               </FilterAccordion>
-              
+
               {/* Size Filter */}
               <FilterAccordion title="Size" isOpen={true} toggle={() => {}}>
                 <div className="grid grid-cols-3 gap-2">
-                  {allSizes.sort().map(size => (
+                  {allSizes.sort().map((size) => (
                     <div key={size} className="flex items-center">
                       <input
                         id={`size-${size}`}
@@ -564,11 +596,11 @@ const ProductListingPage = () => {
                   ))}
                 </div>
               </FilterAccordion>
-              
+
               {/* Gender Filter */}
               <FilterAccordion title="Gender" isOpen={true} toggle={() => {}}>
                 <div className="space-y-2">
-                  {allGenders.map(gender => (
+                  {allGenders.map((gender) => (
                     <div key={gender} className="flex items-center">
                       <input
                         id={`gender-${gender}`}
@@ -587,11 +619,11 @@ const ProductListingPage = () => {
                   ))}
                 </div>
               </FilterAccordion>
-              
+
               {/* Rating Filter */}
               <FilterAccordion title="Rating" isOpen={true} toggle={() => {}}>
                 <div className="space-y-2">
-                  {ratingOptions.map(option => (
+                  {ratingOptions.map((option) => (
                     <div key={option.value} className="flex items-center">
                       <input
                         id={`rating-${option.value}`}
@@ -628,7 +660,8 @@ const ProductListingPage = () => {
           {/* Product Grid */}
           <div className="lg:col-span-3">
             {/* Active Filters */}
-            {(Object.values(activeFilters).flat().length > 0 || searchQuery) && (
+            {(Object.values(activeFilters).flat().length > 0 ||
+              searchQuery) && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -651,7 +684,7 @@ const ProductListingPage = () => {
                     </motion.div>
                   )}
                   {Object.entries(activeFilters).map(([filterType, values]) =>
-                    values.map(value => (
+                    values.map((value) => (
                       <motion.button
                         key={`${filterType}-${value}`}
                         initial={{ scale: 0.9 }}
@@ -665,7 +698,8 @@ const ProductListingPage = () => {
                       </motion.button>
                     ))
                   )}
-                  {(Object.values(activeFilters).flat().length > 0 || searchQuery) && (
+                  {(Object.values(activeFilters).flat().length > 0 ||
+                    searchQuery) && (
                     <button
                       onClick={clearAllFilters}
                       className="text-sm text-cyan-600 hover:text-cyan-800"
@@ -680,12 +714,11 @@ const ProductListingPage = () => {
             {/* Results Info */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-medium text-gray-900">
-                {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
+                {filteredProducts.length}{" "}
+                {filteredProducts.length === 1 ? "product" : "products"}
               </h2>
               <div className="relative">
-                <select
-                  className="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
-                >
+                <select className="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-cyan-500 focus:border-cyan-500">
                   <option>Sort by: Featured</option>
                   <option>Price: Low to High</option>
                   <option>Price: High to Low</option>
@@ -793,12 +826,16 @@ const ProductListingPage = () => {
                     <FiX className="h-6 w-6" />
                   </button>
                 </div>
-                
+
                 {/* Mobile Filter Content */}
                 <div className="py-4">
-                  <FilterAccordion title="Category" isOpen={true} toggle={() => {}}>
+                  <FilterAccordion
+                    title="Category"
+                    isOpen={true}
+                    toggle={() => {}}
+                  >
                     <div className="space-y-2">
-                      {allCategories.map(category => (
+                      {allCategories.map((category) => (
                         <div key={category} className="flex items-center">
                           <input
                             id={`m-category-${category}`}
@@ -817,10 +854,14 @@ const ProductListingPage = () => {
                       ))}
                     </div>
                   </FilterAccordion>
-                  
-                  <FilterAccordion title="Price" isOpen={true} toggle={() => {}}>
+
+                  <FilterAccordion
+                    title="Price"
+                    isOpen={true}
+                    toggle={() => {}}
+                  >
                     <div className="space-y-2">
-                      {priceRanges.map(range => (
+                      {priceRanges.map((range) => (
                         <div key={range.value} className="flex items-center">
                           <input
                             id={`m-price-${range.value}`}
@@ -839,10 +880,14 @@ const ProductListingPage = () => {
                       ))}
                     </div>
                   </FilterAccordion>
-                  
-                  <FilterAccordion title="Color" isOpen={true} toggle={() => {}}>
+
+                  <FilterAccordion
+                    title="Color"
+                    isOpen={true}
+                    toggle={() => {}}
+                  >
                     <div className="space-y-2">
-                      {allColors.map(color => (
+                      {allColors.map((color) => (
                         <div key={color} className="flex items-center">
                           <input
                             id={`m-color-${color}`}
@@ -861,10 +906,10 @@ const ProductListingPage = () => {
                       ))}
                     </div>
                   </FilterAccordion>
-                  
+
                   <FilterAccordion title="Size" isOpen={true} toggle={() => {}}>
                     <div className="grid grid-cols-3 gap-2">
-                      {allSizes.sort().map(size => (
+                      {allSizes.sort().map((size) => (
                         <div key={size} className="flex items-center">
                           <input
                             id={`m-size-${size}`}
@@ -883,10 +928,14 @@ const ProductListingPage = () => {
                       ))}
                     </div>
                   </FilterAccordion>
-                  
-                  <FilterAccordion title="Gender" isOpen={true} toggle={() => {}}>
+
+                  <FilterAccordion
+                    title="Gender"
+                    isOpen={true}
+                    toggle={() => {}}
+                  >
                     <div className="space-y-2">
-                      {allGenders.map(gender => (
+                      {allGenders.map((gender) => (
                         <div key={gender} className="flex items-center">
                           <input
                             id={`m-gender-${gender}`}
@@ -905,16 +954,24 @@ const ProductListingPage = () => {
                       ))}
                     </div>
                   </FilterAccordion>
-                  
-                  <FilterAccordion title="Rating" isOpen={true} toggle={() => {}}>
+
+                  <FilterAccordion
+                    title="Rating"
+                    isOpen={true}
+                    toggle={() => {}}
+                  >
                     <div className="space-y-2">
-                      {ratingOptions.map(option => (
+                      {ratingOptions.map((option) => (
                         <div key={option.value} className="flex items-center">
                           <input
                             id={`m-rating-${option.value}`}
                             type="checkbox"
-                            checked={activeFilters.rating.includes(option.value)}
-                            onChange={() => toggleFilter("rating", option.value)}
+                            checked={activeFilters.rating.includes(
+                              option.value
+                            )}
+                            onChange={() =>
+                              toggleFilter("rating", option.value)
+                            }
                             className="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded"
                           />
                           <label
@@ -940,7 +997,7 @@ const ProductListingPage = () => {
                     </div>
                   </FilterAccordion>
                 </div>
-                
+
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex space-x-3">
                     <motion.button

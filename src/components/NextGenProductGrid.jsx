@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useNotification } from "./NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 // 3D Model Component with auto-rotate (pauses on interaction)
 const InteractiveModel = ({ modelPath, autoRotate, setAutoRotate }) => {
@@ -30,7 +32,7 @@ const ProductGallery = ({ product }) => {
         if (autoRotate) {
           setActiveMedia((prev) => (prev + 1) % product.media.length);
         }
-      }, 3000);
+      }, 10000);
     }
     return () => clearInterval(intervalRef.current);
   }, [autoRotate, product.media.length]);
@@ -131,7 +133,7 @@ const NextGenProductGrid = () => {
 
   // Sample data
   const categories = ["All", "Running", "Casual", "Athletic", "Limited"];
-  
+
   const products = [
     {
       id: 1,
@@ -152,7 +154,6 @@ const NextGenProductGrid = () => {
       category: "Casual",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -164,7 +165,6 @@ const NextGenProductGrid = () => {
       category: "Athletic",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -176,7 +176,6 @@ const NextGenProductGrid = () => {
       category: "Limited",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -188,7 +187,6 @@ const NextGenProductGrid = () => {
       category: "Running",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -200,7 +198,6 @@ const NextGenProductGrid = () => {
       category: "Atheltic",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -212,7 +209,6 @@ const NextGenProductGrid = () => {
       category: "Running",
       description: "Zero-gravity cushioning with adaptive rebound",
       media: [
-        
         { type: "image", src: "/shoes.png" },
         { type: "image", src: "/shoes.png" },
       ],
@@ -220,13 +216,22 @@ const NextGenProductGrid = () => {
     // Add more products with mixed media (3D models + images)
   ];
 
-  const filteredProducts = activeCategory === "All" 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
+  const { addNotification } = useNotification();
+
+  const handleAddToCart = (name) => {
+    addNotification("Product added to cart", name);
+  };
+
+  const filteredProducts =
+    activeCategory === "All"
+      ? products
+      : products.filter((p) => p.category === activeCategory);
+
+  const navigate = useNavigate();
 
   return (
     <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="container mx-auto px-4 sm:px-6 relative z-30 ">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -247,10 +252,10 @@ const NextGenProductGrid = () => {
         </motion.div>
 
         {/* Category Filters */}
-        <CategoryFilter 
-          categories={categories} 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
+        <CategoryFilter
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
         />
 
         {/* Product Grid */}
@@ -279,14 +284,18 @@ const NextGenProductGrid = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="text-sm font-medium text-gray-900 hover:text-cyan-600 transition-colors"
+                    className="text-sm font-medium text-white transition-colors  py-2 px-4 rounded-full bg-black"
+                    onClick={() => {
+                      navigate("/product", { replace: false });
+                    }}
                   >
                     View Details
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-medium"
+                    className=" text-black px-4 py-2 rounded-full text-sm font-medium bg-white border-2 border-black hover:bg-gray-100 transition-colors "
+                    onClick={() => handleAddToCart(product.name)}
                   >
                     Add to Cart
                   </motion.button>
@@ -307,7 +316,7 @@ const NextGenProductGrid = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setVisibleProducts(prev => prev + 6)}
+              onClick={() => setVisibleProducts((prev) => prev + 6)}
               className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all"
             >
               Load More

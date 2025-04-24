@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useNotification } from "./NotificationContext";
 
 // 3D Model Component
 const ShoeModel = ({ modelPath, scale = 1 }) => {
@@ -26,6 +27,11 @@ const ProductCard = ({
   const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const { addNotification } = useNotification();
+
+  const handleAddToCart = () => {
+    addNotification("Product added to cart", title);
+  };
 
   return (
     <motion.div
@@ -55,6 +61,7 @@ const ProductCard = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-gray-900 text-white px-6 py-2 rounded-full text-sm font-medium"
+            onClick={handleAddToCart}
           >
             Add to Cart
           </motion.button>

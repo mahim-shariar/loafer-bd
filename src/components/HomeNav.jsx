@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const HomeNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [ref, inView] = useInView({
@@ -34,7 +34,7 @@ const Navbar = () => {
     <motion.nav
       ref={ref}
       className={`fixed w-full z-50 transition-all duration-500 ${
-        scrolled ? "bg-black bg-opacity-90 backdrop-blur-md" : "bg-black"
+        scrolled ? "bg-black bg-opacity-90 backdrop-blur-md" : "bg-transparent"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -304,4 +304,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default HomeNav;

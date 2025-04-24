@@ -1,8 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useAnimation, useInView } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useAnimation,
+  useInView,
+} from "framer-motion";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { StarIcon } from "@heroicons/react/24/solid";
+import { useNotification } from "./NotificationContext";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 // Neon color gradients
 const neonColors = ["#08f7fe", "#00ff85", "#fe53bb", "#f5d300", "#ff4d00"];
@@ -129,7 +136,8 @@ const ColorSelector = ({ colors, selectedColor, setSelectedColor }) => {
             }`}
             style={{
               backgroundColor: color.hex,
-              borderColor: selectedColor.name === color.name ? neonColors[0] : undefined,
+              borderColor:
+                selectedColor.name === color.name ? neonColors[0] : undefined,
             }}
             aria-label={color.name}
           />
@@ -215,7 +223,10 @@ const CommentForm = ({ onSubmit }) => {
       className="mt-8"
     >
       <div className="mb-4">
-        <label htmlFor="comment" className="block text-sm font-medium text-sky-600 mb-2">
+        <label
+          htmlFor="comment"
+          className="block text-sm font-medium text-sky-600 mb-2"
+        >
           Add your comment
         </label>
         <motion.textarea
@@ -256,7 +267,8 @@ const ProductDetailPage = () => {
       id: 1,
       author: "TechEnthusiast42",
       date: "3 days ago",
-      content: "The 3D model viewer is amazing! Really shows off the product details.",
+      content:
+        "The 3D model viewer is amazing! Really shows off the product details.",
     },
     {
       id: 2,
@@ -266,6 +278,7 @@ const ProductDetailPage = () => {
     },
   ]);
 
+  const { addNotification } = useNotification();
   // Sample product data
   const product = {
     id: 1,
@@ -306,11 +319,16 @@ const ProductDetailPage = () => {
         author: "Jordan K.",
         rating: 4,
         date: "1 month ago",
-        content: "Great shoes but took a while to break in. Now they're perfect!",
+        content:
+          "Great shoes but took a while to break in. Now they're perfect!",
       },
     ],
     rating: 4.8,
     reviewCount: 124,
+  };
+
+  const handleAddToCart = () => {
+    addNotification("Product added to cart", product.name);
   };
 
   // Auto-cycle through media
@@ -326,11 +344,16 @@ const ProductDetailPage = () => {
   }, [autoRotate, product.media.length]);
 
   const handleAddComment = (newComment) => {
-    setComments([...comments, {
-      ...newComment,
-      id: comments.length + 1,
-    }]);
+    setComments([
+      ...comments,
+      {
+        ...newComment,
+        id: comments.length + 1,
+      },
+    ]);
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="bg-gray-50">
@@ -339,10 +362,7 @@ const ProductDetailPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16">
             {/* Media Gallery */}
-            <motion.div
-              variants={fadeInVariants}
-              className="mb-10 lg:mb-0"
-            >
+            <motion.div variants={fadeInVariants} className="mb-10 lg:mb-0">
               <div className="relative h-96 lg:h-[500px] w-full bg-white rounded-2xl overflow-hidden shadow-xl">
                 <AnimatePresence mode="wait">
                   {product.media[activeMedia].type === "3d" ? (
@@ -406,7 +426,8 @@ const ProductDetailPage = () => {
                           : "bg-gray-300 scale-100"
                       }`}
                       style={{
-                        background: activeMedia === index ? neonColors[0] : undefined,
+                        background:
+                          activeMedia === index ? neonColors[0] : undefined,
                       }}
                     />
                   ))}
@@ -425,12 +446,17 @@ const ProductDetailPage = () => {
 
               {/* Price */}
               <motion.div variants={itemVariants} className="mt-4">
-                <p className="text-3xl font-bold text-sky-600">${product.price}</p>
+                <p className="text-3xl font-bold text-sky-600">
+                  ${product.price}
+                </p>
                 <p className="text-sm text-gray-500 mt-1">Including VAT</p>
               </motion.div>
 
               {/* Rating */}
-              <motion.div variants={itemVariants} className="mt-4 flex items-center">
+              <motion.div
+                variants={itemVariants}
+                className="mt-4 flex items-center"
+              >
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
@@ -450,7 +476,9 @@ const ProductDetailPage = () => {
 
               {/* Description */}
               <motion.div variants={itemVariants} className="mt-6">
-                <h2 className="text-sm font-medium text-sky-600">Description</h2>
+                <h2 className="text-sm font-medium text-sky-600">
+                  Description
+                </h2>
                 <p className="mt-2 text-gray-600">{product.description}</p>
               </motion.div>
 
@@ -502,15 +530,16 @@ const ProductDetailPage = () => {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex-1 text-white py-3 px-6 rounded-full font-medium text-sm sm:text-base shadow-lg bg-black"
-                  
+                  onClick={() => navigate("/checkout")}
                 >
-                    Buy Now
-                  
+                  Buy Now
                 </motion.button>
+
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex-1 text-back py-3 px-6 rounded-full font-medium text-sm sm:text-base shadow-lg bg-white border-2 border-black"
+                  onClick={handleAddToCart}
                 >
                   Add to Cart
                 </motion.button>
@@ -554,7 +583,10 @@ const ProductDetailPage = () => {
       {/* Reviews Section */}
       <AnimatedSection className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2 variants={itemVariants} className="text-2xl font-bold text-gray-900 mb-8">
+          <motion.h2
+            variants={itemVariants}
+            className="text-2xl font-bold text-gray-900 mb-8"
+          >
             Customer Reviews
           </motion.h2>
           <div className="max-w-3xl">
@@ -576,7 +608,10 @@ const ProductDetailPage = () => {
       {/* Comments Section */}
       <AnimatedSection className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2 variants={itemVariants} className="text-2xl font-bold text-gray-900 mb-8">
+          <motion.h2
+            variants={itemVariants}
+            className="text-2xl font-bold text-gray-900 mb-8"
+          >
             Community Discussion
           </motion.h2>
           <motion.div
@@ -594,7 +629,10 @@ const ProductDetailPage = () => {
       {/* Similar Products */}
       <AnimatedSection className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2 variants={itemVariants} className="text-2xl font-bold text-gray-900 mb-8">
+          <motion.h2
+            variants={itemVariants}
+            className="text-2xl font-bold text-gray-900 mb-8"
+          >
             You May Also Like
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
