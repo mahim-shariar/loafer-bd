@@ -92,11 +92,11 @@ const HomeNav = () => {
             {navItems.map((item, index) => (
               <motion.a
                 key={index}
-                href={item.href}
                 className="relative text-white text-sm uppercase tracking-wider group"
                 whileHover={{ scale: 1.05 }}
               >
-                {item.name}
+                <Link to={item.href}>{item.name}</Link>
+                
                 <motion.span
                   className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"
                   initial={{ width: 0 }}
@@ -255,14 +255,13 @@ const HomeNav = () => {
                 {navItems.map((item, index) => (
                   <motion.a
                     key={index}
-                    href={item.href}
                     className="text-white text-lg uppercase tracking-wider"
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => setIsOpen(false)}
                   >
-                    {item.name}
+                      <Link to={item.href}>{item.name}</Link>
                   </motion.a>
                 ))}
                 <motion.button

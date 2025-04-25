@@ -327,6 +327,52 @@ const ProductDetailPage = () => {
     rating: 4.8,
     reviewCount: 124,
   };
+  const productForYouMayLikeAlso = {
+    id: 1,
+    name: "Quantum Loafer Pro",
+    price: 249,
+    description:
+      "Premium leather with advanced cushioning technology for all-day comfort.",
+    category: "Loafers",
+    features: [
+      "QuantumAir™ cushioning",
+      "Italian full-grain leather",
+      "Handcrafted construction",
+      "Anti-slip rubber sole",
+    ],
+    sizes: ["7", "8", "9", "10", "11", "12"],
+    colors: [
+      { name: "Black", hex: "#000000" },
+      { name: "Cognac", hex: "#9A5B34" },
+      { name: "Navy", hex: "#001F3F" },
+    ],
+    media: [
+      { type: "3d", src: "/shoe-draco-3.glb" },
+      { type: "image", src: "/shoes.png" },
+      { type: "image", src: "/shoes.png" },
+      { type: "image", src: "/shoes.png" },
+    ],
+    reviews: [
+      {
+        id: 1,
+        author: "Alex M.",
+        rating: 5,
+        date: "2 weeks ago",
+        content:
+          "The most comfortable loafers I've ever worn. Worth every penny!",
+      },
+      {
+        id: 2,
+        author: "Jordan K.",
+        rating: 4,
+        date: "1 month ago",
+        content:
+          "Great shoes but took a while to break in. Now they're perfect!",
+      },
+    ],
+    rating: 4.8,
+    reviewCount: 124,
+  };
 
   const handleViewDetails = () =>{
     navigate(`/product`);
@@ -643,17 +689,17 @@ const ProductDetailPage = () => {
             {/* Similar products would be rendered here */}
 
             <ProductCard 
-        product={product}
+        product={productForYouMayLikeAlso}
         onAddToCart={handleAddToCart}
         onViewDetails={handleViewDetails}
       />
       <ProductCard 
-        product={product}
+        product={productForYouMayLikeAlso}
         onAddToCart={handleAddToCart}
         onViewDetails={handleViewDetails}
       />
       <ProductCard 
-        product={product}
+        product={productForYouMayLikeAlso}
         onAddToCart={handleAddToCart}
         onViewDetails={handleViewDetails}
       />

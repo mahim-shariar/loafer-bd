@@ -1,10 +1,9 @@
 // components/Layout.jsx
-import { useLocation } from "react-router-dom";
-
-import Navbar from "./components/Navbar";
+import {  useLocation } from "react-router-dom";
 import HomeNav from "./components/HomeNav";
-import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 import Wrapper from "./components/Wrapper";
+import Footer from "./components/Footer";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -12,11 +11,11 @@ export default function Layout({ children }) {
 
   return (
     <div className="app-container">
+
       {isHomePage ? <HomeNav /> : <Navbar />}
 
       <main className={isHomePage ? "" : "pt-25"}>
-        {" "}
-        <Wrapper>{children}</Wrapper>{" "}
+        <Wrapper>{children}</Wrapper>
       </main>
       <Footer />
     </div>
