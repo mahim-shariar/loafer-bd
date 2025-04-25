@@ -10,6 +10,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { useNotification } from "./NotificationContext";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import ProductCard from "./ProductCard";
 
 // Neon color gradients
 const neonColors = ["#08f7fe", "#00ff85", "#fe53bb", "#f5d300", "#ff4d00"];
@@ -327,6 +328,9 @@ const ProductDetailPage = () => {
     reviewCount: 124,
   };
 
+  const handleViewDetails = () =>{
+    navigate(`/product`);
+  };
   const handleAddToCart = () => {
     addNotification("Product added to cart", product.name);
   };
@@ -635,8 +639,24 @@ const ProductDetailPage = () => {
           >
             You May Also Like
           </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Similar products would be rendered here */}
+
+            <ProductCard 
+        product={product}
+        onAddToCart={handleAddToCart}
+        onViewDetails={handleViewDetails}
+      />
+      <ProductCard 
+        product={product}
+        onAddToCart={handleAddToCart}
+        onViewDetails={handleViewDetails}
+      />
+      <ProductCard 
+        product={product}
+        onAddToCart={handleAddToCart}
+        onViewDetails={handleViewDetails}
+      />
           </div>
         </div>
       </AnimatedSection>

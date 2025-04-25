@@ -23,11 +23,9 @@ const HomeNav = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#" },
-    { name: "Products", href: "#products" },
-    { name: "Technology", href: "#tech" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+    { name: "Dashboard", href: "/dashboard" },
   ];
 
   return (

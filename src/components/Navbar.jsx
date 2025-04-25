@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,12 +23,11 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#" },
-    { name: "Products", href: "#products" },
-    { name: "Technology", href: "#tech" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+    { name: "Dashboard", href: "/dashboard" },
   ];
+  const navigate = useNavigate();
 
   return (
     <motion.nav
@@ -68,7 +67,8 @@ const Navbar = () => {
               <span className="text-white font-bold text-xl">L</span>
             </motion.div>
             <motion.span
-              className="text-white font-bold text-2xl bg-clip-text  bg-gradient-to-r from-cyan-400 to-purple-500"
+              onClick={() => navigate("/")}
+              className="text-white font-bold text-2xl bg-clip-text  bg-gradient-to-r from-cyan-400 to-purple-500  cursor-pointer"
               animate={{
                 backgroundImage: [
                   `linear-gradient(to right, ${neonColors[0]}, ${neonColors[1]})`,

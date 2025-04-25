@@ -11,6 +11,7 @@ import CartPage from "./components/CartPage.jsx";
 import AuthPage from "./components/AuthPage.jsx";
 import { NotificationProvider } from "./components/NotificationContext.jsx";
 import Layout from "./Layout.jsx";
+import AdminDashboard from "./components/dashboard.jsx";
 
 // Create a wrapper component that uses the layout
 const LayoutWrapper = () => {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
         path: "/auth",
         element: <AuthPage />,
       },
+      {
+        path: "/dashboard",
+        element: <AdminDashboard />,
+      }
     ],
   },
 ]);

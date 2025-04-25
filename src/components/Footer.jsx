@@ -55,9 +55,9 @@ const Footer = () => {
           >
             <div className="flex items-center mb-6">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-lg">Q</span>
+                <span className="text-white font-bold text-lg">L</span>
               </div>
-              <span className="text-2xl font-bold text-white">QUANTUM</span>
+              <span className="text-2xl font-bold text-white">LOAFER BD</span>
             </div>
             <p className="text-gray-300 mb-6">
               Crafting the future of footwear with innovative design and premium
